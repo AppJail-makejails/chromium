@@ -10,7 +10,9 @@ wikipedia.org/wiki/Chromium_(web_browser)
 
 ## How to use this AppJail
 
-For each new release, the AppJail can be obtained as an asset. [`sysutils/bin`](https://freshports.org/sysutils/bin) is a binary manager capable of downloading, installing, and updating, making it well-suited for our purposes.
+### General usage
+
+You can obtain the AppJail from the releases section of this repository. However, to go beyond a simple download and be able to update it conveniently from the console, the simplest complementary tool for our purposes is [sysutils/bin](https://freshports.org/sysutils/bin), a binary manager:
 
 ```console
 $ doas pkg install -y bin
@@ -47,9 +49,26 @@ KEY                                                                   COMMENT
 37e1a7da5478a29ec3d38ecb14919b107beab67cc0de0b473b5b018f018e1ccb.pub  dtxdf@disroot.org (x11appjail) public key
 ```
 
+A system-wide installation requires only root access; the key is not necessary. However, it is strongly recommended to verify the binary before installation, making it necessary to install the key anyway.
+
+```console
+$ x11appjail verify ~/bin/chromium.appjail
+Signature Verified
+$ doas ~/bin/chromium.appjail --install
+$ x11appjail run chromium
+```
+
+An AppJail creates the jail only if it does not already exist or if the AppJail detects a valid change in its checksum (e.g.: after an update). This means that updates to the OCI image used by the AppJail are only checked at the creation time. If you need to update the OCI image, simply destroy the jail:
+
+```console
+$ x11appjail destroy-jail chromium
+```
+
+Once you run the AppJail again, the OCI image is pulled again only if it is newer than the one on your system.
 
 
-### User Attributes
+### Attributes
+#### User Attributes
 
 | Name | Description |
 | --- | --- |
@@ -60,7 +79,7 @@ KEY                                                                   COMMENT
 | `virtualgl-display` | If the user has the `enable_3d` permission, this specifies the display or EGL device to be used for 3D rendering. Since using EGL is the only logical choice for this project, the default value is `egl`. In multi-GPU environments, it is possible to specify a particular device.|
 | `webcam` | This permission will make webcam-related devices visible.|
 
-### System Attributes
+#### System Attributes
 
 | Name | Description |
 | --- | --- |
