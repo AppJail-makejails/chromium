@@ -6,7 +6,7 @@ The Chromium website contains design documents, architecture overviews, testing 
 
 wikipedia.org/wiki/Chromium_(web_browser)
 
-<img src="https://raw.githubusercontent.com/AppJail-makejails/chromium/refs/heads/main/chromium/chromium.png" width="30%" height="auto" alt="chromium logo">
+<img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Chromium_Logo.svg/500px-Chromium_Logo.svg.png" width="30%" height="auto" alt="chromium logo">
 
 ## How to use this AppJail
 
