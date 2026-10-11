@@ -1,29 +1,13 @@
 #!/bin/sh
 
-set -e -o pipefail
+__run_program=
 
-JEXEC="${X11APPJAIL_BASEDIR}/usr/local/libexec/appjail/jexec/jexec"
+. "${X11APPJAIL_WORKDIR}/appjail.d/perms.subr"
 
-. "${X11APPJAIL_WORKDIR}/perms.sh"
-
-if ${ENABLE_3D_ALREADY}; then
-    VGL_DISPLAY="egl"
-    ATTR="${X11APPJAIL_APPNAME}:${X11APPJAIL_PROFILE}.virtualgl.display"
-
-    if x11appjail sys-attr check "${ATTR}" "${X11APPJAIL_UID}"; then
-        VGL_DISPLAY=`x11appjail sys-attr cat "${ATTR}" "${X11APPJAIL_UID}"`
-    fi
-
-    exec "${JEXEC}" -l \
-        -U noroot \
-        -e DISPLAY="${X11APPJAIL_DISPLAY}" \
-        "${X11APPJAIL_JAIL}" \
-        /usr/local/VirtualGL/bin/vglrun -d "${VGL_DISPLAY}" \
-        dbus-run-session -- chrome --use-gl=angle "$@"
+if ${__perms_allow_3d}; then
+    set -- dbus-run-session -- chrome --use-gl=angle "$@"
 else
-    exec "${JEXEC}" -l \
-        -U noroot \
-        -e DISPLAY="${X11APPJAIL_DISPLAY}" \
-        "${X11APPJAIL_JAIL}" \
-        dbus-run-session -- chrome --ignore-gpu-blocklist "$@"
+    set -- dbus-run-session -- chrome --ignore-gpu-blocklist "$@"
 fi
+
+. "${X11APPJAIL_WORKDIR}/appjail.d/run.subr"

@@ -1,9 +1,5 @@
 #!/bin/sh
 
-APPNAME="chromium"
+__install_appname="chromium"
 
-set -e -o pipefail
-
-PREFIX=`x11appjail prefix`
-
-exec "${PREFIX}/libexec/x11appjail/misc/simple-desktop-file-utils.sh" "${APPNAME}" "I"
+. "${X11APPJAIL_WORKDIR}/appjail.d/install.subr"
